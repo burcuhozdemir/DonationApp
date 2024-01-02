@@ -5,11 +5,13 @@ import {persistReducer, persistStore} from 'redux-persist';
 
 // Importing the User reducer from the ./reducers/User file
 import User from './reducers/User';
+import Categories from './reducers/Categories';
 
 // Creating a rootReducer that combines all reducers in the app
 
 const rootReducer = combineReducers({
   user: User,
+  categories: Categories,
 });
 const congiguration = {
   key: 'root',
