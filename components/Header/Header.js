@@ -19,7 +19,11 @@ const Header = props => {
 
   return (
     <View>
-      <Text style={styleToApply(props.type)}>{props.title}</Text>
+      <Text
+        style={[styleToApply(), props.color && {color: props.color}]}
+        numberOfLines={props.numberOfLines ? props.numberOfLines : null}>
+        {props.title}
+      </Text>
     </View>
   );
 };
@@ -27,11 +31,14 @@ const Header = props => {
 Header.default = {
   title: '',
   type: 1,
+  color: '#000000',
 };
 
 Header.propTypes = {
   title: PropTypes.string,
   type: PropTypes.number,
+  color: PropTypes.string,
+  numberOfLines: PropTypes.number,
 };
 
 export default Header;

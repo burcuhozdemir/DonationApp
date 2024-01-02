@@ -16,12 +16,15 @@ import {resetToInitialState, updateFirstName} from '../../redux/reducers/User';
 import Search from '../../components/Search/Search';
 import Tab from '../../components/Tab/Tab';
 import {updateSelectedCategoryId} from '../../redux/reducers/Categories';
+import SingleDonationItem from '../../components/SingleDonationItem/SingleDonationItem';
 
 const Home = () => {
   const categories = useSelector(state => state.categories);
+  const donations = useSelector(state => state.donations);
   const user = useSelector(state => state.user);
   const dispatch = useDispatch();
 
+  const [donationItems, setDonationItems] = useState([]);
   const [categoryPage, setCategoryPage] = useState(1);
   const [categoryList, setCategoryList] = useState([]);
   const [isLoadingCategories, setIsLoadingCategories] = useState(false);
@@ -35,6 +38,13 @@ const Home = () => {
     }
     return items.slice(startIndex, endIndex);
   };
+
+  useEffect(() => {
+    const items = donations.items.filter(value =>
+      value.categoryIds.includes(categories.selectedCategoryId),
+    );
+    setDonationItems(items);
+  }, [categories.selectedCategoryId]);
 
   useEffect(() => {
     setIsLoadingCategories(true);
@@ -108,6 +118,26 @@ const Home = () => {
             )}
           />
         </View>
+        {donationItems.length > 0 && (
+          <View style={style.donationItemsContainer}>
+            {donationItems.map(value => (
+              <View key={value.donationItemId} style={style.singleDonationItem}>
+                <SingleDonationItem
+                  onPress={selectedDonationId => {}}
+                  donationItemId={value.donationItemId}
+                  uri={value.image}
+                  donationTitle={value.name}
+                  badgeTitle={
+                    categories.categories.filter(
+                      val => val.categoryId === categories.selectedCategoryId,
+                    )[0].name
+                  }
+                  price={parseFloat(value.price)}
+                />
+              </View>
+            ))}
+          </View>
+        )}
       </ScrollView>
     </SafeAreaView>
   );
